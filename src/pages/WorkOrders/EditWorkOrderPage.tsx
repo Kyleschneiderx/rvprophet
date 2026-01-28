@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../api';
 import { queryKeys } from '../../constants/queryKeys';
-import { useAuth } from '../../context/AuthContext';
 import type { WorkOrderPart, WorkOrderStatus } from '../../types';
 import { formatCurrency } from '../../utils/formatters';
 
@@ -13,7 +12,6 @@ export const EditWorkOrderPage = () => {
   const { rvId, workOrderId } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { profile } = useAuth();
 
   const { data: workOrder, isLoading: isLoadingWorkOrder } = useQuery({
     queryKey: queryKeys.workOrder(workOrderId!),
