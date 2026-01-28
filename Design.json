@@ -1,0 +1,608 @@
+{
+    "designSystem": {
+      "name": "CRM Dashboard Design System",
+      "version": "1.0.0",
+      "description": "A modern SaaS CRM interface design system with kanban views, card-based layouts, and clean typography"
+    },
+    
+    "colorPalette": {
+      "primary": {
+        "background": {
+          "dark": "#1a1d2e",
+          "darker": "#13161f",
+          "description": "Deep navy/dark blue for sidebar and primary surfaces"
+        },
+        "accent": {
+          "purple": "#6366f1",
+          "purpleLight": "#8b5cf6",
+          "description": "Primary brand color for interactive elements"
+        }
+      },
+      "secondary": {
+        "green": {
+          "light": "#86efac",
+          "medium": "#22c55e",
+          "description": "Success states, active status, positive actions"
+        },
+        "yellow": {
+          "light": "#fef3c7",
+          "medium": "#fbbf24",
+          "description": "Warning states, prospect status"
+        },
+        "gray": {
+          "light": "#f3f4f6",
+          "medium": "#9ca3af",
+          "dark": "#4b5563",
+          "description": "Inactive states, secondary text, borders"
+        }
+      },
+      "neutral": {
+        "white": "#ffffff",
+        "background": "#fafafa",
+        "border": "#e5e7eb",
+        "text": {
+          "primary": "#111827",
+          "secondary": "#6b7280",
+          "tertiary": "#9ca3af"
+        }
+      }
+    },
+    
+    "typography": {
+      "fontFamily": {
+        "primary": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        "description": "Modern sans-serif with excellent readability"
+      },
+      "scale": {
+        "heading1": {
+          "fontSize": "24px",
+          "fontWeight": "600",
+          "lineHeight": "32px",
+          "usage": "Page titles, main headers"
+        },
+        "heading2": {
+          "fontSize": "18px",
+          "fontWeight": "600",
+          "lineHeight": "28px",
+          "usage": "Section headers, card titles"
+        },
+        "body": {
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "20px",
+          "usage": "Main content, descriptions"
+        },
+        "bodySmall": {
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "lineHeight": "18px",
+          "usage": "Labels, metadata"
+        },
+        "caption": {
+          "fontSize": "12px",
+          "fontWeight": "500",
+          "lineHeight": "16px",
+          "usage": "Status badges, small labels"
+        }
+      }
+    },
+    
+    "spacing": {
+      "scale": {
+        "xs": "4px",
+        "sm": "8px",
+        "md": "12px",
+        "lg": "16px",
+        "xl": "24px",
+        "2xl": "32px",
+        "3xl": "48px"
+      },
+      "usage": {
+        "cardPadding": "16px",
+        "columnGap": "16px",
+        "sectionMargin": "24px",
+        "componentSpacing": "12px"
+      }
+    },
+    
+    "borderRadius": {
+      "small": "4px",
+      "medium": "8px",
+      "large": "12px",
+      "full": "9999px",
+      "usage": {
+        "cards": "12px",
+        "buttons": "6px",
+        "badges": "9999px",
+        "inputs": "6px",
+        "avatars": "50%"
+      }
+    },
+    
+    "shadows": {
+      "card": "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
+      "cardHover": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+      "dropdown": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+      "none": "none"
+    },
+    
+    "layoutStructure": {
+      "sidebar": {
+        "width": "228px",
+        "background": "dark navy (#1a1d2e)",
+        "position": "fixed left",
+        "structure": {
+          "header": {
+            "height": "64px",
+            "contains": "Logo and workspace selector"
+          },
+          "navigation": {
+            "sections": [
+              {
+                "type": "primary",
+                "items": ["Dashboard", "Task", "Calendar"]
+              },
+              {
+                "type": "sales",
+                "label": "Sales",
+                "items": ["Leads", "Opportunities", "Contacts", "Companies"]
+              },
+              {
+                "type": "marketing",
+                "label": "Marketing",
+                "items": ["Forms", "Emails", "Social Media Ads"]
+              }
+            ]
+          },
+          "footer": {
+            "contains": "User profile, Help and Support, Settings"
+          }
+        }
+      },
+      "mainContent": {
+        "marginLeft": "228px",
+        "padding": "24px",
+        "structure": {
+          "header": {
+            "height": "64px",
+            "elements": ["Page title", "Actions (right-aligned)", "Search/Filter tools"]
+          },
+          "tabs": {
+            "height": "48px",
+            "style": "Underlined active state with green indicator"
+          },
+          "toolbar": {
+            "height": "48px",
+            "elements": ["Search", "Sort", "Filter", "View Switcher", "Add Button"]
+          },
+          "content": {
+            "type": "Flexible grid or kanban layout"
+          }
+        }
+      }
+    },
+    
+    "components": {
+      "navigationItem": {
+        "structure": {
+          "height": "40px",
+          "padding": "8px 16px",
+          "display": "flex",
+          "alignItems": "center",
+          "gap": "12px"
+        },
+        "states": {
+          "default": {
+            "background": "transparent",
+            "color": "#9ca3af",
+            "iconColor": "#6b7280"
+          },
+          "hover": {
+            "background": "rgba(255, 255, 255, 0.05)",
+            "color": "#e5e7eb"
+          },
+          "active": {
+            "background": "#2d3548",
+            "color": "#ffffff",
+            "borderLeft": "3px solid #6366f1"
+          }
+        },
+        "badge": {
+          "position": "right",
+          "size": "20px",
+          "background": "#ef4444",
+          "color": "#ffffff",
+          "borderRadius": "full"
+        }
+      },
+      
+      "card": {
+        "structure": {
+          "width": "100%",
+          "minHeight": "160px",
+          "padding": "16px",
+          "background": "#ffffff",
+          "borderRadius": "12px",
+          "border": "1px solid #e5e7eb",
+          "boxShadow": "card"
+        },
+        "layout": {
+          "header": {
+            "display": "flex",
+            "justifyContent": "space-between",
+            "marginBottom": "12px",
+            "elements": {
+              "icon": {
+                "size": "40px",
+                "borderRadius": "8px",
+                "display": "Logo or brand color"
+              },
+              "title": {
+                "fontSize": "16px",
+                "fontWeight": "600",
+                "color": "#111827"
+              },
+              "subtitle": {
+                "fontSize": "13px",
+                "color": "#6b7280",
+                "marginTop": "2px"
+              },
+              "menu": {
+                "position": "absolute top-right",
+                "icon": "three-dots"
+              }
+            }
+          },
+          "body": {
+            "display": "grid",
+            "gridTemplateColumns": "1fr 1fr",
+            "gap": "12px",
+            "marginTop": "16px"
+          },
+          "field": {
+            "label": {
+              "fontSize": "12px",
+              "color": "#6b7280",
+              "marginBottom": "4px"
+            },
+            "value": {
+              "fontSize": "14px",
+              "color": "#111827",
+              "fontWeight": "500"
+            }
+          }
+        },
+        "states": {
+          "hover": {
+            "boxShadow": "cardHover",
+            "transform": "translateY(-2px)",
+            "transition": "all 0.2s ease"
+          }
+        }
+      },
+      
+      "button": {
+        "primary": {
+          "background": "#22c55e",
+          "color": "#ffffff",
+          "padding": "8px 16px",
+          "borderRadius": "6px",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "border": "none",
+          "boxShadow": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+          "states": {
+            "hover": {
+              "background": "#16a34a"
+            },
+            "active": {
+              "background": "#15803d"
+            }
+          }
+        },
+        "secondary": {
+          "background": "#ffffff",
+          "color": "#374151",
+          "border": "1px solid #d1d5db",
+          "padding": "8px 16px",
+          "borderRadius": "6px",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "states": {
+            "hover": {
+              "background": "#f9fafb",
+              "borderColor": "#9ca3af"
+            }
+          }
+        },
+        "icon": {
+          "size": "36px",
+          "padding": "8px",
+          "borderRadius": "6px",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center"
+        }
+      },
+      
+      "badge": {
+        "structure": {
+          "padding": "4px 12px",
+          "borderRadius": "9999px",
+          "fontSize": "12px",
+          "fontWeight": "500",
+          "display": "inline-flex",
+          "alignItems": "center"
+        },
+        "variants": {
+          "active": {
+            "background": "#d1fae5",
+            "color": "#065f46"
+          },
+          "prospect": {
+            "background": "#fef3c7",
+            "color": "#92400e"
+          },
+          "inactive": {
+            "background": "#f3f4f6",
+            "color": "#4b5563"
+          },
+          "count": {
+            "background": "#f3f4f6",
+            "color": "#6b7280",
+            "minWidth": "24px",
+            "height": "24px",
+            "padding": "0 8px",
+            "justifyContent": "center"
+          }
+        }
+      },
+      
+      "kanbanColumn": {
+        "structure": {
+          "minWidth": "320px",
+          "maxWidth": "400px",
+          "padding": "0",
+          "display": "flex",
+          "flexDirection": "column",
+          "gap": "12px"
+        },
+        "header": {
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "padding": "12px 16px",
+          "background": "#fafafa",
+          "borderRadius": "8px 8px 0 0",
+          "marginBottom": "8px",
+          "elements": {
+            "badge": "Status badge on left",
+            "count": "Count badge next to status",
+            "actions": "Add button and menu on right"
+          }
+        },
+        "body": {
+          "display": "flex",
+          "flexDirection": "column",
+          "gap": "12px",
+          "padding": "0 4px"
+        }
+      },
+      
+      "input": {
+        "search": {
+          "height": "40px",
+          "padding": "8px 12px 8px 36px",
+          "borderRadius": "6px",
+          "border": "1px solid #d1d5db",
+          "fontSize": "14px",
+          "background": "#ffffff",
+          "iconLeft": {
+            "position": "absolute",
+            "left": "12px",
+            "color": "#9ca3af"
+          },
+          "states": {
+            "focus": {
+              "borderColor": "#6366f1",
+              "outline": "2px solid rgba(99, 102, 241, 0.1)"
+            }
+          }
+        }
+      },
+      
+      "dropdown": {
+        "trigger": {
+          "height": "40px",
+          "padding": "8px 12px",
+          "borderRadius": "6px",
+          "border": "1px solid #d1d5db",
+          "background": "#ffffff",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "8px"
+        },
+        "menu": {
+          "background": "#ffffff",
+          "borderRadius": "8px",
+          "border": "1px solid #e5e7eb",
+          "boxShadow": "dropdown",
+          "padding": "4px",
+          "minWidth": "200px"
+        },
+        "item": {
+          "padding": "8px 12px",
+          "borderRadius": "4px",
+          "fontSize": "14px",
+          "states": {
+            "hover": {
+              "background": "#f3f4f6"
+            },
+            "selected": {
+              "background": "#ede9fe",
+              "color": "#6366f1"
+            }
+          }
+        }
+      },
+      
+      "iconLogo": {
+        "structure": {
+          "size": "40px",
+          "borderRadius": "8px",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center"
+        },
+        "variants": {
+          "colored": {
+            "background": "Brand color (purple, blue, green, orange, etc.)",
+            "color": "#ffffff"
+          },
+          "neutral": {
+            "background": "#f3f4f6",
+            "color": "#6b7280"
+          }
+        }
+      },
+      
+      "avatar": {
+        "size": "32px",
+        "borderRadius": "50%",
+        "border": "2px solid #e5e7eb",
+        "overflow": "hidden"
+      },
+      
+      "divider": {
+        "height": "1px",
+        "background": "#e5e7eb",
+        "margin": "16px 0"
+      }
+    },
+    
+    "patterns": {
+      "kanbanBoard": {
+        "description": "Multi-column drag-and-drop board layout",
+        "layout": {
+          "display": "flex",
+          "gap": "16px",
+          "overflowX": "auto",
+          "padding": "16px 0"
+        },
+        "columns": {
+          "minWidth": "320px",
+          "flex": "0 0 auto"
+        }
+      },
+      
+      "dataGrid": {
+        "description": "Responsive grid of cards",
+        "layout": {
+          "display": "grid",
+          "gridTemplateColumns": "repeat(auto-fill, minmax(320px, 1fr))",
+          "gap": "16px"
+        }
+      },
+      
+      "toolbar": {
+        "description": "Action bar with search, filters, and controls",
+        "layout": {
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "padding": "16px 0",
+          "gap": "12px"
+        },
+        "left": "Search and filter controls",
+        "right": "View switcher and primary actions"
+      }
+    },
+    
+    "interactions": {
+      "transitions": {
+        "default": "all 0.2s ease",
+        "fast": "all 0.15s ease",
+        "slow": "all 0.3s ease"
+      },
+      "hover": {
+        "cards": "Subtle lift with shadow increase",
+        "buttons": "Background color change",
+        "navigationItems": "Background overlay"
+      },
+      "focus": {
+        "outline": "2px solid rgba(99, 102, 241, 0.4)",
+        "outlineOffset": "2px"
+      }
+    },
+    
+    "responsiveness": {
+      "breakpoints": {
+        "mobile": "640px",
+        "tablet": "768px",
+        "desktop": "1024px",
+        "wide": "1280px"
+      },
+      "sidebarBehavior": {
+        "mobile": "Collapsible overlay",
+        "desktop": "Fixed sidebar"
+      },
+      "cardGrid": {
+        "mobile": "1 column",
+        "tablet": "2 columns",
+        "desktop": "3+ columns"
+      }
+    },
+    
+    "iconography": {
+      "style": "Outline style icons (Heroicons or similar)",
+      "size": {
+        "small": "16px",
+        "medium": "20px",
+        "large": "24px"
+      },
+      "strokeWidth": "1.5px to 2px",
+      "usage": {
+        "navigation": "Left-aligned before text",
+        "actions": "Right-aligned or standalone buttons",
+        "status": "Inline with text or in badges"
+      }
+    },
+    
+    "designPrinciples": {
+      "whitespace": "Generous spacing for clarity and breathing room",
+      "hierarchy": "Clear visual hierarchy through size, weight, and color",
+      "consistency": "Repeated patterns for similar interactions",
+      "contrast": "Dark sidebar against light content area",
+      "feedback": "Visual feedback on all interactive elements",
+      "accessibility": "Sufficient color contrast and focus indicators"
+    },
+    
+    "usageGuidelines": {
+      "cardDesign": [
+        "Always include a clear header with icon and title",
+        "Use two-column grid for metadata fields",
+        "Include action menu (three dots) in top right",
+        "Maintain consistent padding (16px) across all cards",
+        "Use subtle shadows and hover states for depth"
+      ],
+      "statusBadges": [
+        "Use semantic colors (green=active, yellow=prospect, gray=inactive)",
+        "Always pill-shaped with full border radius",
+        "Include count badges next to status labels where applicable"
+      ],
+      "navigation": [
+        "Group related items under section headers",
+        "Use left border accent for active states",
+        "Include badges for notifications or counts",
+        "Maintain consistent icon sizing"
+      ],
+      "colorUsage": [
+        "Primary brand color (purple) for key actions and branding",
+        "Green for success, completion, and positive actions",
+        "Yellow/amber for warnings or pending states",
+        "Gray for neutral, inactive, or secondary information",
+        "Maintain high contrast between text and background"
+      ]
+    }
+}

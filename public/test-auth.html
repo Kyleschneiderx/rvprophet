@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Auth Test</title>
+  <style>
+    body { font-family: sans-serif; padding: 40px; max-width: 500px; margin: 0 auto; }
+    input { display: block; width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+    button { padding: 10px 20px; background: #3b82f6; color: white; border: none; cursor: pointer; margin-top: 10px; }
+    pre { background: #f1f1f1; padding: 10px; overflow: auto; white-space: pre-wrap; max-height: 400px; }
+    .error { color: red; }
+    .success { color: green; }
+  </style>
+</head>
+<body>
+  <h1>Auth Test</h1>
+
+  <div>
+    <input type="email" id="email" placeholder="Email" value="kyle@schneidermedia.co">
+    <input type="password" id="password" placeholder="Password" value="Brothers25!">
+    <button id="loginBtn">Test Login</button>
+  </div>
+
+  <h3>Log:</h3>
+  <pre id="log">Loading Supabase...</pre>
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const SUPABASE_URL = 'https://xpeaxvidfbuijmnxfzyy.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwZWF4dmlkZmJ1aWptbnhmenl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1NjIwNDYsImV4cCI6MjA4NTEzODA0Nn0.E-AXDuYtZSdXn8WsrHVCV3xIzM8v5NqtxLgdaJbDZFY';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const logEl = document.getElementById('log');
+    logEl.innerHTML = 'Supabase loaded. Ready to test.\n';
+
+    function log(msg, type = '') {
+      const time = new Date().toLocaleTimeString();
+      logEl.innerHTML += `<span class="${type}">[${time}] ${msg}</span>\n`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      log('Starting login test...');
+
+      try {
+        log('Step 1: Signing in...');
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          log(`AUTH ERROR: ${error.message}`, 'error');
+          return;
+        }
+
+        log('AUTH SUCCESS! User ID: ' + data.user?.id, 'success');
+
+        // Wait a moment before fetching profile
+        log('Step 2: Waiting 500ms...');
+        await new Promise(r => setTimeout(r, 500));
+
+        log('Step 3: Fetching profile with raw fetch...');
+        const profileRes = await fetch(
+          `${SUPABASE_URL}/rest/v1/profiles?id=eq.${data.user.id}&select=*`,
+          {
+            headers: {
+              'apikey': SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${data.session.access_token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        if (!profileRes.ok) {
+          log(`PROFILE FETCH ERROR: ${profileRes.status}`, 'error');
+          return;
+        }
+
+        const profiles = await profileRes.json();
+        if (profiles.length === 0) {
+          log('No profile found!', 'error');
+          return;
+        }
+
+        const profile = profiles[0];
+        log('PROFILE SUCCESS!', 'success');
+        log(`Name: ${profile.name}`);
+        log(`Role: ${profile.role}`);
+        log(`Dealership: ${profile.dealership_id}`);
+        log('');
+        log('=== ALL TESTS PASSED ===', 'success');
+
+      } catch (err) {
+        log(`EXCEPTION: ${err.message}`, 'error');
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
