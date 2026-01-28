@@ -3,11 +3,12 @@ import type { FormEvent, ReactNode } from 'react';
 import { useState } from 'react';
 import { api } from '../../api';
 import { queryKeys } from '../../constants/queryKeys';
-import { useRole } from '../../context/AuthContext';
+import { useAuth, useRole } from '../../context/AuthContext';
 import type { DealershipSettings, Role, User } from '../../types';
 
 export const SettingsPage = () => {
   const { role } = useRole();
+  const { signOut } = useAuth();
   const queryClient = useQueryClient();
   const [isAddingUser, setIsAddingUser] = useState(false);
 
@@ -103,6 +104,17 @@ export const SettingsPage = () => {
       <SettingsCard title="Work order defaults">
         <WorkOrderSettings settings={settings} onSave={updateSettings} />
       </SettingsCard>
+
+      {/* Logout button for mobile */}
+      <div className="pt-4 sm:hidden">
+        <button
+          type="button"
+          onClick={signOut}
+          className="w-full rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600"
+        >
+          Sign out
+        </button>
+      </div>
 
       {isAddingUser && (
         <AddUserModal
