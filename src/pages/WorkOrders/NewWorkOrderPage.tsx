@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../api';
 import { queryKeys } from '../../constants/queryKeys';
+import { useAuth } from '../../context/AuthContext';
 import type { WorkOrderPart, WorkOrderStatus } from '../../types';
 import { formatCurrency } from '../../utils/formatters';
 
@@ -12,6 +13,7 @@ export const NewWorkOrderPage = () => {
   const { rvId } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { profile } = useAuth();
 
   const { data: rv } = useQuery({
     queryKey: queryKeys.rv(rvId!),
@@ -58,6 +60,8 @@ export const NewWorkOrderPage = () => {
   const laborSubtotal = laborHours * laborRate;
   const totalEstimate = partsSubtotal + laborSubtotal;
 
+  const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (payload: {
       status: WorkOrderStatus;
@@ -72,12 +76,19 @@ export const NewWorkOrderPage = () => {
         status: payload.status,
         technicianNotes,
         managerNotes: '',
-        technicianId: 'tech-1',
+        technicianId: profile?.id,
       }),
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.workOrdersForRV(rvId!) });
       queryClient.invalidateQueries({ queryKey: queryKeys.workOrders });
-      navigate(`/rvs/${rvId}`);
+      const message = variables.status === 'draft'
+        ? 'Work order saved as draft'
+        : 'Work order submitted to manager';
+      setSubmitMessage({ type: 'success', text: message });
+      setTimeout(() => navigate(`/rvs/${rvId}`), 1500);
+    },
+    onError: (error) => {
+      setSubmitMessage({ type: 'error', text: error instanceof Error ? error.message : 'Failed to save work order' });
     },
   });
 
@@ -339,6 +350,17 @@ export const NewWorkOrderPage = () => {
               <dd>{formatCurrency(totalEstimate)}</dd>
             </div>
           </dl>
+          {submitMessage && (
+            <div
+              className={`mt-4 rounded-xl p-3 text-sm font-medium ${
+                submitMessage.type === 'success'
+                  ? 'bg-green-50 text-green-800'
+                  : 'bg-red-50 text-red-800'
+              }`}
+            >
+              {submitMessage.text}
+            </div>
+          )}
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <button
               type="button"
@@ -346,7 +368,7 @@ export const NewWorkOrderPage = () => {
               onClick={() => handleSubmit('draft')}
               className="rounded-xl border border-neutral-border px-4 py-3 text-sm font-semibold text-neutral-text disabled:opacity-50"
             >
-              Save draft
+              {isPending ? 'Saving...' : 'Save draft'}
             </button>
             <button
               type="button"
@@ -354,7 +376,7 @@ export const NewWorkOrderPage = () => {
               onClick={() => handleSubmit('submitted')}
               className="rounded-xl bg-brand-accent px-4 py-3 text-sm font-semibold text-white shadow-card transition hover:bg-brand-accent/90 disabled:opacity-50"
             >
-              Submit to manager
+              {isPending ? 'Submitting...' : 'Submit to manager'}
             </button>
           </div>
         </Card>
