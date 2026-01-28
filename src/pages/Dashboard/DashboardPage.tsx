@@ -1,15 +1,16 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import { MegaphoneIcon } from '@heroicons/react/24/outline';
 import { api } from '../../api';
 import { queryKeys } from '../../constants/queryKeys';
-import { useRole } from '../../context/AuthContext';
-import type { Announcement } from '../../types';
+import { useAuth } from '../../context/AuthContext';
+import type { Announcement, WorkOrder } from '../../types';
 import { formatCurrency, formatDate, statusStyles } from '../../utils/formatters';
 
 export const DashboardPage = () => {
-  const { role } = useRole();
-  const { data: workOrders = [], isLoading: workOrdersLoading } = useQuery({
+  const { role, profile } = useAuth();
+  const { data: allWorkOrders = [], isLoading: workOrdersLoading } = useQuery({
     queryKey: queryKeys.workOrders,
     queryFn: () => api.getWorkOrders(),
   });
@@ -23,6 +24,16 @@ export const DashboardPage = () => {
     queryKey: [...queryKeys.announcements, role],
     queryFn: () => api.getAnnouncements(role),
   });
+
+  // Filter work orders based on role
+  // Technicians only see their own work orders
+  // Managers/Owners see all work orders
+  const workOrders: WorkOrder[] = useMemo(() => {
+    if (role === 'technician' && profile?.id) {
+      return allWorkOrders.filter((wo) => wo.technicianId === profile.id);
+    }
+    return allWorkOrders;
+  }, [allWorkOrders, role, profile?.id]);
 
   const customerMap = useMemo(() => {
     const map = new Map<string, string>();
@@ -89,9 +100,10 @@ export const DashboardPage = () => {
         </div>
         <div className="mt-4 space-y-3">
           {recent.map((order) => (
-            <article
+            <Link
               key={order.id}
-              className="rounded-2xl border border-neutral-border p-4 transition hover:shadow-cardHover"
+              to={`/work-orders/${order.id}`}
+              className="block rounded-2xl border border-neutral-border p-4 transition hover:shadow-cardHover hover:border-brand-accent/30"
             >
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
@@ -116,7 +128,7 @@ export const DashboardPage = () => {
                   </p>
                 </div>
               </div>
-            </article>
+            </Link>
           ))}
           {recent.length === 0 && (
             <div className="rounded-xl border border-dashed border-neutral-border p-6 text-center text-sm text-neutral-textSecondary">
