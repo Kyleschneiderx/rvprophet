@@ -760,6 +760,46 @@ export const supabaseApi = {
     return announcements;
   },
 
+  async createAnnouncement(data: {
+    title: string;
+    message: string;
+    audience: Role[] | 'all';
+    actionLabel?: string;
+    actionLink?: string;
+  }): Promise<Announcement> {
+    const dealershipId = await getDealershipId();
+
+    const audienceArray = data.audience === 'all' ? ['all'] : data.audience;
+
+    const { data: announcement, error } = await supabase
+      .from('announcements')
+      .insert({
+        dealership_id: dealershipId,
+        title: data.title,
+        message: data.message,
+        audience: audienceArray,
+        action_label: data.actionLabel ?? null,
+        action_link: data.actionLink ?? null,
+      })
+      .select('id, title, message, audience, action_label, action_link, created_at')
+      .single();
+
+    if (error) throw new Error(error.message);
+    return transformAnnouncement(announcement);
+  },
+
+  async deleteAnnouncement(id: string): Promise<void> {
+    const dealershipId = await getDealershipId();
+
+    const { error } = await supabase
+      .from('announcements')
+      .delete()
+      .eq('id', id)
+      .eq('dealership_id', dealershipId);
+
+    if (error) throw new Error(error.message);
+  },
+
   // Customer Approval - get work order by approval token (public)
   async getWorkOrderByApprovalToken(token: string): Promise<{
     workOrder: WorkOrder;

@@ -87,7 +87,9 @@ const persistUsers = () => {
   storage.setItem(USERS_KEY, JSON.stringify(users));
 };
 
-const announcements: Announcement[] = [
+const ANNOUNCEMENTS_KEY = 'rvprophet_announcements';
+
+const seededAnnouncements: Announcement[] = [
   {
     id: 'ann-1',
     title: 'Service bay iPad rollout',
@@ -115,6 +117,14 @@ const announcements: Announcement[] = [
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
   },
 ];
+
+let announcements: Announcement[] =
+  (storage && JSON.parse(storage.getItem(ANNOUNCEMENTS_KEY) || 'null')) || seededAnnouncements;
+
+const persistAnnouncements = () => {
+  if (!storage) return;
+  storage.setItem(ANNOUNCEMENTS_KEY, JSON.stringify(announcements));
+};
 
 let customers: Customer[] = [
   {
@@ -507,9 +517,37 @@ export const mockApi = {
     if (!currentRole) return clone(announcements);
     return clone(
       announcements.filter(
-        (item) => item.audience === 'all' || item.audience.includes(currentRole),
+        (item) => item.audience === 'all' || (Array.isArray(item.audience) && item.audience.includes(currentRole)),
       ),
     );
+  },
+
+  async createAnnouncement(data: {
+    title: string;
+    message: string;
+    audience: Role[] | 'all';
+    actionLabel?: string;
+    actionLink?: string;
+  }) {
+    await randomDelay();
+    const newAnnouncement: Announcement = {
+      id: nanoid(),
+      title: data.title,
+      message: data.message,
+      audience: data.audience,
+      createdAt: new Date().toISOString(),
+      actionLabel: data.actionLabel,
+      actionLink: data.actionLink,
+    };
+    announcements = [newAnnouncement, ...announcements];
+    persistAnnouncements();
+    return clone(newAnnouncement);
+  },
+
+  async deleteAnnouncement(id: string) {
+    await randomDelay();
+    announcements = announcements.filter((a) => a.id !== id);
+    persistAnnouncements();
   },
 
   async createUser(data: Omit<User, 'id'>) {
