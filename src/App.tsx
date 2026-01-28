@@ -11,6 +11,7 @@ import { PartsPage } from './pages/Parts/PartsPage';
 import { RvDetailPage } from './pages/RVs/RvDetailPage';
 import { SettingsPage } from './pages/Settings/SettingsPage';
 import { NewWorkOrderPage } from './pages/WorkOrders/NewWorkOrderPage';
+import { EditWorkOrderPage } from './pages/WorkOrders/EditWorkOrderPage';
 import { WorkOrderDetailPage } from './pages/WorkOrders/WorkOrderDetailPage';
 import { ReportsPage } from './pages/Reports/ReportsPage';
 
@@ -36,6 +37,7 @@ function App() {
         <Route path="/parts" element={<PartsPage />} />
         <Route path="/rvs/:rvId" element={<RvDetailPage />} />
         <Route path="/rvs/:rvId/work-orders/new" element={<NewWorkOrderPage />} />
+        <Route path="/rvs/:rvId/work-orders/:workOrderId/edit" element={<EditWorkOrderPage />} />
         <Route path="/work-orders/:workOrderId" element={<WorkOrderDetailPage />} />
         <Route
           path="/settings"

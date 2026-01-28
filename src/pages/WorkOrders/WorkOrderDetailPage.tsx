@@ -62,7 +62,8 @@ export const WorkOrderDetailPage = () => {
     }
   }, [isError, navigate]);
 
-  const canEditDraft = role === 'technician' && workOrder?.status === 'draft';
+  const isDraft = workOrder?.status === 'draft';
+  const canEditDraft = isDraft && Boolean(workOrder);
   const canManage =
     (role === 'manager' || role === 'owner') && Boolean(workOrder);
   const canSendToCustomer =
@@ -294,30 +295,45 @@ export const WorkOrderDetailPage = () => {
       </div>
 
       {canEditDraft && (
-        <Card title="Technician notes">
-          <textarea
-            rows={4}
-            className="w-full rounded-2xl border border-neutral-border px-3 py-2 text-sm focus:border-brand-accent focus:outline-none"
-            value={technicianNotes}
-            onChange={(event) => setTechnicianNotes(event.target.value)}
-          />
-          <div className="mt-3 flex gap-3">
-            <button
-              type="button"
-              onClick={handleSaveTechNotes}
-              disabled={isPending}
-              className="flex-1 rounded-xl border border-neutral-border px-4 py-2 text-sm font-semibold text-neutral-text disabled:opacity-50"
-            >
-              Save draft
-            </button>
-            <button
-              type="button"
-              onClick={() => handleStatusChange('submitted')}
-              disabled={isPending}
-              className="flex-1 rounded-xl bg-brand-accent px-4 py-2 text-sm font-semibold text-white shadow-card disabled:opacity-50"
-            >
-              Submit to manager
-            </button>
+        <Card title="Draft Actions">
+          <p className="text-sm text-neutral-textSecondary mb-4">
+            This work order is saved as a draft. You can edit it or submit it for manager approval.
+          </p>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-neutral-text">Technician Notes</label>
+              <textarea
+                rows={3}
+                className="mt-1 w-full rounded-2xl border border-neutral-border px-3 py-2 text-sm focus:border-brand-accent focus:outline-none"
+                value={technicianNotes}
+                onChange={(event) => setTechnicianNotes(event.target.value)}
+                placeholder="Add notes for the manager..."
+              />
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <Link
+                to={`/rvs/${workOrder.rvId}/work-orders/${workOrderId}/edit`}
+                className="rounded-xl border border-neutral-border px-4 py-2 text-sm font-semibold text-neutral-text text-center hover:bg-gray-50"
+              >
+                Edit Details
+              </Link>
+              <button
+                type="button"
+                onClick={handleSaveTechNotes}
+                disabled={isPending}
+                className="rounded-xl border border-neutral-border px-4 py-2 text-sm font-semibold text-neutral-text disabled:opacity-50"
+              >
+                {isPending ? 'Saving...' : 'Save Notes'}
+              </button>
+              <button
+                type="button"
+                onClick={() => handleStatusChange('submitted')}
+                disabled={isPending}
+                className="rounded-xl bg-brand-accent px-4 py-2 text-sm font-semibold text-white shadow-card disabled:opacity-50"
+              >
+                {isPending ? 'Submitting...' : 'Submit to Manager'}
+              </button>
+            </div>
           </div>
         </Card>
       )}
